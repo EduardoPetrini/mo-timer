@@ -2,6 +2,7 @@
 import { watchEffect, ref } from 'vue';
 
 const props = defineProps(['isPlaying']);
+const showButton = ref(false);
 const playListIds = ['6sGPclX1FuHmWjn6yJemng', '4avuiL7lthpPIndh7lYWqH', '37i9dQZF1DWWQRwui0ExPn', '5bWjbsAqxaTTDxxwbVGJwH', '4eWBwGl0c5wtp6k5Krp6My', '5z9CdKSqJjAt30rhTlRDZX', '2Al9G2jrWkwDlRFMZaw1GX'];
 
 const currentPlayList = ref(playListIds[0]);
@@ -17,6 +18,10 @@ window.onSpotifyIframeApiReady = IFrameAPI => {
   };
   let callback = EmbedController => {
     audioController = EmbedController;
+    setTimeout(() => {
+
+      showButton.value = true;
+    }, 1000)
   };
 
   IFrameAPI.createController(element, options, callback);
@@ -46,7 +51,7 @@ function randomPlaylist() {
 <template>
   <div class="mt-10 absolute bottom-10">
     <iframe id="embed-iframe"></iframe>
-    <button class="btn absolute top-40 right-0 text-gray-200" @click="randomPlaylist" title="Click to select another random playlist" atl="click to select another random playlist">
+    <button v-show="showButton" class="btn absolute top-40 right-0 text-gray-200" @click="randomPlaylist" title="Click to select another random playlist" atl="click to select another random playlist">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
         <path
           stroke-linecap="round"
