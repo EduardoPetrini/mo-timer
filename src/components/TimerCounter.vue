@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
-import MusicPlayer from './MusicPlayer.vue'
+
 const isPlaying = ref(true);
 const second = ref(0);
 const minute = ref(60);
@@ -88,6 +88,6 @@ intervalId = startResume();
         </svg>
       </button>
     </div>
-    <MusicPlayer />
+   
   </div>
 </template>
