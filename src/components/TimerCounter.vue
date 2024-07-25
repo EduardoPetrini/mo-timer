@@ -1,10 +1,10 @@
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 
 const isPlaying = ref(true);
 const second = ref(0);
-const minute = ref(60);
-const hour = ref(0);
+const minute = ref(0);
+const hour = ref(1);
 let intervalId;
 
 const startResume = () => {
@@ -19,27 +19,43 @@ const startResume = () => {
   return interval;
 };
 
-watchEffect(() => {
+watchEffect(async () => {
   if (!isPlaying.value) {
     return;
   }
 
   if (second.value <= 0 && minute.value <= 0 && hour.value <= 0) {
+    pausePlay();
+    const audioAlert = new Audio('./alert1.wav');
+    await audioAlert.play();
     return clearInterval(intervalId);
   }
 
   if (second.value <= 0) {
     setTimeout(() => {
+      clearInterval(intervalId);
       if (minute.value === 0) {
         hour.value--;
         minute.value = 59;
+        second.value = 59;
+        intervalId = startResume();
         return;
       }
+
       minute.value--;
       second.value = 59;
+      intervalId = startResume();
     }, 1000);
   }
 });
+
+function pausePlay() {
+  isPlaying.value = false;
+
+  if (intervalId) {
+    return clearInterval(intervalId);
+  }
+}
 
 function togglePlay() {
   const isTimeRunning = isPlaying.value;
@@ -57,9 +73,26 @@ function reset() {
   isPlaying.value = false;
 
   second.value = 0;
-  minute.value = 60;
-  hour.value = 0;
+  minute.value = 0;
+  hour.value = 1;
 }
+
+function clicked(event) {
+  event.target.select();
+  pausePlay();
+}
+
+function focusOut() {
+  togglePlay();
+}
+
+function onEnter(event) {
+  event.target.blur();
+}
+
+const displayHour = computed(() => (hour.value.toString().length > 1 ? hour.value.toString().slice(-2) : hour.value.toString().padStart(2, '0')));
+const displayMinute = computed(() => (minute.value.toString().length > 1 ? minute.value.toString().slice(-2) : minute.value.toString().padStart(2, '0')));
+const displaySecond = computed(() => (second.value.toString().length > 1 ? second.value.toString().slice(-2) : second.value.toString().padStart(2, '0')));
 
 intervalId = startResume();
 </script>
@@ -67,9 +100,9 @@ intervalId = startResume();
 <template>
   <div>
     <div class="flex text-6xl font-bold font-mono p-4 bg-gray-200/80 rounded-2xl shadow-md shadow-gray-200/80 hover:bg-gray-100 hover:shadow-lg hover:shadow-gray-100/80 transition ease-out duration-500">
-      <span>{{ hour.toString().padStart(2, '0') }}:</span>
-      <span>{{ minute.toString().padStart(2, '0') }}:</span>
-      <span>{{ second.toString().padStart(2, '0') }}</span>
+      <input @focus="clicked" @blur="focusOut" @keyup.enter="onEnter" type="text" :value="displayHour" @input="event => (hour = event.target.value)" class="bg-gray-300 w-20 rounded-lg px-2" />:
+      <input @focus="clicked" @blur="focusOut" @keyup.enter="onEnter" type="text" :value="displayMinute" @input="event => (minute = event.target.value)" class="bg-gray-300 w-20 rounded-lg px-2" />:
+      <input @focus="clicked" @blur="focusOut" @keyup.enter="onEnter" type="text" :value="displaySecond" @input="event => (second = event.target.value)" class="bg-gray-300 w-20 rounded-lg px-2" />
     </div>
     <div class="flex gap-4 text-gray-200 justify-around mt-4">
       <button v-show="!isPlaying" @click="togglePlay" class="hover:text-amber-100 hover:scale-125 transition ease-out duration-500">
@@ -88,6 +121,5 @@ intervalId = startResume();
         </svg>
       </button>
     </div>
-   
   </div>
 </template>
