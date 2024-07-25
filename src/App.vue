@@ -6,7 +6,23 @@ import BackgroundImage from './components/BackgroundImage.vue';
 import FullScreen from './components/FullScreen.vue';
 
 const isPlaying = ref(false);
-const bgImage = ref("url('/wave-pattern.svg')");
+const backgroundImageList = [
+  { 'background-image': "url('/wave-pattern.svg')" },
+  { 'background-image': "url('/feather-surface.jpg')", 'background-size': '100%' },
+  { 'background-image': "url('/feather-backdrop.jpg')", 'background-size': '100%' },
+  { 'background-image': "url('/gradient-background.avif')", 'background-size': '100%' },
+  { 'background-image': "url('/bullseye-gradient.svg')", 'background-size': '100%' },
+  { 'background-image': "url('/endless-constellation.svg')" },
+  { 'background-image': "url('/slanted-gradient.svg')", 'background-size': '100%' },
+  { 'background-image': "url('/gradient-blue.jpg')", 'background-size': '100%' },
+];
+const styleObj = ref(backgroundImageList[0]);
+
+function randomBackground() {
+  const randomIndex = Math.floor(Math.random() * backgroundImageList.length);
+
+  styleObj.value = backgroundImageList[randomIndex];
+}
 
 function playEvent(play) {
   isPlaying.value = play;
@@ -14,11 +30,11 @@ function playEvent(play) {
 </script>
 
 <template>
-  <div class="p-2 h-screen flex justify-center items-center bg-black" :style="{ 'background-image': bgImage }">
+  <div class="p-2 h-screen flex justify-center items-center bg-black" :style="styleObj">
     <TimerCounter @play="playEvent" />
-    <MusicPlayer :isPlaying="isPlaying"/>
-    <BackgroundImage />
-    <FullScreen  />
+    <MusicPlayer :isPlaying="isPlaying" />
+    <BackgroundImage @changeBackground="randomBackground" />
+    <FullScreen />
   </div>
 </template>
 

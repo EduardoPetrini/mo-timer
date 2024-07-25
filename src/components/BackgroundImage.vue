@@ -1,7 +1,13 @@
-<script setup></script>
+<script setup>
+const emit = defineEmits(['changeBackground']);
+
+function changeBackground() {
+  emit('changeBackground')
+}
+</script>
 
 <template>
-  <button class="absolute text-gray-400 right-6 bottom-20 btn hidden md:block" title="Change the background image" @click="toggleFS">
+  <button class="absolute text-gray-400 right-6 bottom-20 btn hidden md:block" title="Change the background image" @click="changeBackground">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-8">
       <path
         stroke-linecap="round"
