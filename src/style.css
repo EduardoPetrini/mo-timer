@@ -5,3 +5,7 @@
 .btn {
   @apply hover:text-amber-100 hover:scale-125 transition ease-out duration-500
 }
+
+.time-input {
+  @apply bg-gray-300 w-20 rounded-lg text-center 
+}

@@ -105,9 +105,9 @@ const displaySecond = computed(() => (second.value.toString().length > 1 ? secon
 <template>
   <div>
     <div class="flex sm:text-5xl md:text-6xl font-bold font-mono p-4 bg-gray-200/80 rounded-2xl shadow-md shadow-gray-200/80 hover:bg-gray-100 hover:shadow-lg hover:shadow-gray-100/80 transition ease-out duration-500">
-      <input @focus="clicked" @blur="focusOut" @keyup.enter="onEnter" type="text" :value="displayHour" @input="event => (hour = event.target.value)" class="bg-gray-300 w-20 rounded-lg text-center md:px-2" />:
-      <input @focus="clicked" @blur="focusOut" @keyup.enter="onEnter" type="text" :value="displayMinute" @input="event => (minute = event.target.value)" class="bg-gray-300 w-20 rounded-lg text-center md:px-2" />:
-      <input @focus="clicked" @blur="focusOut" @keyup.enter="onEnter" type="text" :value="displaySecond" @input="event => (second = event.target.value)" class="bg-gray-300 w-20 rounded-lg text-center md:px-2" />
+      <input @focus="clicked" @blur="focusOut" @keyup.enter="onEnter" type="text" :value="displayHour" @input="event => (hour = event.target.value)" class="time-input" />:
+      <input @focus="clicked" @blur="focusOut" @keyup.enter="onEnter" type="text" :value="displayMinute" @input="event => (minute = event.target.value)" class="time-input" />:
+      <input @focus="clicked" @blur="focusOut" @keyup.enter="onEnter" type="text" :value="displaySecond" @input="event => (second = event.target.value)" class="time-input" />
     </div>
     <div class="flex gap-4 text-gray-200 justify-around mt-4">
       <button v-show="!isPlaying" @click="togglePlay" class="btn" title="Click to start the timer and the song">
