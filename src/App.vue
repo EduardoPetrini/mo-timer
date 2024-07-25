@@ -17,9 +17,15 @@ const backgroundImageList = [
   { 'background-image': "url('/gradient-blue.jpg')", 'background-size': '100%' },
 ];
 const styleObj = ref(backgroundImageList[0]);
+const previousIndex = ref(0);
 
 function randomBackground() {
-  const randomIndex = Math.floor(Math.random() * backgroundImageList.length);
+  let randomIndex = Math.floor(Math.random() * backgroundImageList.length);
+  while(randomIndex === previousIndex) {
+    randomIndex = Math.floor(Math.random() * backgroundImageList.length);
+  }
+
+  previousIndex.value = randomIndex;
 
   styleObj.value = backgroundImageList[randomIndex];
 }
@@ -31,8 +37,10 @@ function playEvent(play) {
 
 <template>
   <div class="p-2 h-screen flex justify-center items-center bg-black" :style="styleObj">
-    <TimerCounter @play="playEvent" />
-    <MusicPlayer :isPlaying="isPlaying" />
+    <div class="block">
+      <TimerCounter @play="playEvent" />
+      <MusicPlayer :isPlaying="isPlaying" />
+    </div>
     <BackgroundImage @changeBackground="randomBackground" />
     <FullScreen />
   </div>
