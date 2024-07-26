@@ -20,9 +20,8 @@ window.onSpotifyIframeApiReady = IFrameAPI => {
   let callback = EmbedController => {
     audioController = EmbedController;
     setTimeout(() => {
-
       showButton.value = true;
-    }, 1000)
+    }, 1000);
   };
 
   IFrameAPI.createController(element, options, callback);
@@ -41,14 +40,12 @@ watchEffect(() => {
 function randomPlaylist() {
   audioController.pause();
 
-  let randomIndex = Math.floor(Math.random() * playListIds.length);
+  previousIndex.value++;
 
-  while(randomIndex === previousIndex) {
-    randomIndex = Math.floor(Math.random() * backgroundImageList.length);
+  if (previousIndex.value === playListIds.length) {
+    previousIndex.value = 0;
   }
 
-  previousIndex.value = randomIndex;
-  
   const newPlaylist = playListIds[randomIndex];
 
   audioController.loadUri('spotify:playlist:' + newPlaylist);
