@@ -1,5 +1,6 @@
 <script setup>
-import { watchEffect, ref } from 'vue';
+import { watchEffect, ref, onMounted } from 'vue';
+import { storeGet, storeSet } from '../utils/storage';
 
 const props = defineProps(['isPlaying']);
 const showButton = ref(false);
@@ -11,6 +12,12 @@ const previousIndex = ref(0);
 let audioController;
 
 window.onSpotifyIframeApiReady = IFrameAPI => {
+  let plIndex = storeGet('pl-index');
+  if (!plIndex) {
+    plIndex = 0;
+  }
+  currentPlayList.value = playListIds[plIndex];
+  
   let element = document.getElementById('embed-iframe');
   let options = {
     uri: 'spotify:playlist:' + currentPlayList.value,
@@ -45,8 +52,12 @@ function randomPlaylist() {
   if (previousIndex.value === playListIds.length) {
     previousIndex.value = 0;
   }
+  storeSet('pl-index', `${previousIndex.value}`);
+  setPlaylist(previousIndex.value);
+}
 
-  const newPlaylist = playListIds[previousIndex.value];
+function setPlaylist(index) {
+  const newPlaylist = playListIds[index];
 
   audioController.loadUri('spotify:playlist:' + newPlaylist);
 }

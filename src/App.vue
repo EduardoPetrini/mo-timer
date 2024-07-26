@@ -4,6 +4,7 @@ import TimerCounter from './components/TimerCounter.vue';
 import MusicPlayer from './components/MusicPlayer.vue';
 import BackgroundImage from './components/BackgroundImage.vue';
 import FullScreen from './components/FullScreen.vue';
+import { storeGet, storeSet } from './utils/storage';
 
 const isPlaying = ref(false);
 const isRequestTogglePlayChanged = ref({ active: false });
@@ -59,7 +60,13 @@ function randomBackground() {
     previousIndex.value = 0;
   }
 
-  styleObj.value = backgroundImageList[previousIndex.value];
+  storeSet('bg-index', `${previousIndex.value}`);
+
+  setStyle(previousIndex.value);
+}
+
+function setStyle(index) {
+  styleObj.value = backgroundImageList[index];
 }
 
 function playEvent(play) {
@@ -72,11 +79,16 @@ function spacePressed(event) {
   }
 
   isRequestTogglePlayChanged.value.active = !isRequestTogglePlayChanged.value.active;
-  console.log('changed', isRequestTogglePlayChanged.value);
 }
 
 onMounted(() => {
   window.addEventListener('keyup', spacePressed);
+  const bgIndex = storeGet('bg-index');
+  
+  if (bgIndex) {
+    previousIndex.value = Number(bgIndex);
+    setStyle(previousIndex.value);
+  }
 });
 onBeforeUnmount(() => {
   window.removeEventListener('keyup', spacePressed);
