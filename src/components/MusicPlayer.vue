@@ -46,7 +46,7 @@ function randomPlaylist() {
     previousIndex.value = 0;
   }
 
-  const newPlaylist = playListIds[randomIndex];
+  const newPlaylist = playListIds[previousIndex.value];
 
   audioController.loadUri('spotify:playlist:' + newPlaylist);
 }
