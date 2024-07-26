@@ -1,6 +1,7 @@
 <script setup>
-import { computed, ref, watchEffect } from 'vue';
+import { computed, ref, watch, watchEffect } from 'vue';
 
+const { isRequestTogglePlayChanged } = defineProps(['isRequestTogglePlayChanged']);
 const emit = defineEmits(['play']);
 
 const isPlaying = ref(false);
@@ -56,6 +57,10 @@ watchEffect(async () => {
       intervalId = startResume();
     }, 1000);
   }
+});
+
+watch(isRequestTogglePlayChanged, () => {
+  togglePlay();
 });
 
 function pausePlay() {
