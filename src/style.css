@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .btn {
-  @apply hover:text-amber-100 hover:scale-125 transition ease-out duration-500
+  @apply bg-gray-600/50 rounded-full p-1 border-white hover:border-b hover:text-amber-100 hover:scale-125 transition ease-out duration-500 
 }
 
 .time-input {
