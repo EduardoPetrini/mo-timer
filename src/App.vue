@@ -1,9 +1,9 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import TimerCounter from './components/TimerCounter.vue';
 import MusicPlayer from './components/MusicPlayer.vue';
 import BackgroundImage from './components/BackgroundImage.vue';
 import FullScreen from './components/FullScreen.vue';
+import TimerTab from './components/TimerTab.vue';
 import { storeGet, storeSet } from './utils/storage';
 
 const isPlaying = ref(false);
@@ -84,7 +84,7 @@ function spacePressed(event) {
 onMounted(() => {
   window.addEventListener('keyup', spacePressed);
   const bgIndex = storeGet('bg-index');
-  
+
   if (bgIndex) {
     previousIndex.value = Number(bgIndex);
     setStyle(previousIndex.value);
@@ -98,7 +98,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="p-2 h-screen flex justify-center items-center bg-black" :style="styleObj">
     <div class="block">
-      <TimerCounter @play="playEvent" :isRequestTogglePlayChanged="isRequestTogglePlayChanged" />
+      <TimerTab @play="playEvent" :isRequestTogglePlayChanged="isRequestTogglePlayChanged" />
       <MusicPlayer :isPlaying="isPlaying" />
     </div>
     <BackgroundImage @changeBackground="randomBackground" />

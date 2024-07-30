@@ -3,9 +3,14 @@
 @tailwind utilities;
 
 .btn {
-  @apply bg-gray-600/50 rounded-full p-1 border-white hover:border-b hover:text-amber-100 hover:scale-125 transition ease-out duration-500 
+  @apply bg-gray-600/50 rounded-full p-1 border-white hover:border-b hover:text-amber-100 hover:scale-125 transition ease-out duration-500;
+}
+
+.btn-active {
+  @apply border-b scale-110 transition ease-out duration-500;
 }
 
 .time-input {
-  @apply bg-gray-300 w-20 rounded-lg text-center 
+  @apply bg-gray-300 w-20 rounded-lg text-center;
 }
+
