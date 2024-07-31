@@ -17,6 +17,10 @@ onMounted(async () => {
   });
   currentPlayList.value = playListIds[0];
 
+  setupSpotify();
+});
+
+function setupSpotify() {
   window.onSpotifyIframeApiReady = IFrameAPI => {
     let plIndex = storeGet('pl-index');
     if (!plIndex) {
@@ -39,7 +43,7 @@ onMounted(async () => {
 
     IFrameAPI.createController(element, options, callback);
   };
-});
+}
 
 let audioController;
 
