@@ -1,6 +1,6 @@
 <script setup>
 import { watchEffect, ref, onMounted } from 'vue';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { storeGet, storeSet } from '../utils/storage';
 
