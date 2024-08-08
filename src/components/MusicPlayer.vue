@@ -26,6 +26,8 @@ function setupSpotify() {
     if (!plIndex) {
       plIndex = 0;
     }
+    
+    previousIndex.value = plIndex;
     currentPlayList.value = playListIds[plIndex];
 
     let element = document.getElementById('embed-iframe');
