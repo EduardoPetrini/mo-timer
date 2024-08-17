@@ -1,5 +1,5 @@
 <script setup>
-import { watchEffect, ref, onMounted, onBeforeMount } from 'vue';
+import { watchEffect, ref, onMounted } from 'vue';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { storeGet, storeSet } from '../utils/storage';
@@ -17,6 +17,10 @@ onMounted(async () => {
     videosIds.push(doc.data().vd);
   });
   currentVideo.value = videosIds[0];
+
+  if (window.YT?.Player) {
+    return window.onYouTubeIframeAPIReady();
+  }
 
   mountYoutubeScriptTag();
 });
@@ -40,7 +44,7 @@ window.onYouTubeIframeAPIReady = () => {
 
   previousIndex.value = ytIndex;
   currentVideo.value = videosIds[ytIndex] || 'RDjfKfPfyJRdk';
-  console.log('Starting with the video', videosIds[ytIndex])
+  console.log('Starting with the video', videosIds[ytIndex]);
 
   player = new window.YT.Player('player', {
     height: '100',
