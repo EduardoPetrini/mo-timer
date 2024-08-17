@@ -2,11 +2,11 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from './config/firebase';
-import MusicPlayer from './components/MusicPlayer.vue';
 import BackgroundImage from './components/BackgroundImage.vue';
 import FullScreen from './components/FullScreen.vue';
 import TimerTab from './components/TimerTab.vue';
 import { storeGet, storeSet } from './utils/storage';
+import PlayerSelector from './components/PlayerSelector.vue';
 
 const isPlaying = ref(false);
 const isRequestTogglePlayChanged = ref({ active: false });
@@ -67,7 +67,7 @@ onBeforeUnmount(() => {
   <div class="p-2 h-screen flex justify-center items-center bg-black" :style="styleObj">
     <div class="block">
       <TimerTab @play="playEvent" :isRequestTogglePlayChanged="isRequestTogglePlayChanged" />
-      <MusicPlayer :isPlaying="isPlaying" />
+      <PlayerSelector :isPlaying="isPlaying" />
     </div>
     <BackgroundImage @changeBackground="randomBackground" />
     <FullScreen />

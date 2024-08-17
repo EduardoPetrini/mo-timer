@@ -34,6 +34,7 @@ function setupSpotify() {
     let options = {
       uri: 'spotify:playlist:' + currentPlayList.value,
       height: 100,
+      width: 333,
       theme: 'dark',
     };
     let callback = EmbedController => {
