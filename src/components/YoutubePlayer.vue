@@ -70,7 +70,6 @@ window.onYouTubeIframeAPIReady = () => {
 };
 
 function onPlayerReady(event) {
-  event.target.playVideo();
   setTimeout(() => {
     showButton.value = true;
   }, 100);
