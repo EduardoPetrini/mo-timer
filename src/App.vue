@@ -15,6 +15,8 @@ const backgroundImageList = [];
 const styleObj = ref('');
 const previousIndex = ref(0);
 
+const KEYBOARD_EVENTS = ['Space', 'MediaPlayPause'];
+
 function randomBackground() {
   previousIndex.value++;
 
@@ -36,7 +38,7 @@ function playEvent(play) {
 }
 
 function spacePressed(event) {
-  if (event.code !== 'Space' || event.target.tagName !== 'BODY') {
+  if (!KEYBOARD_EVENTS.includes(event.code) || event.target.tagName !== 'BODY') {
     return;
   }
 
