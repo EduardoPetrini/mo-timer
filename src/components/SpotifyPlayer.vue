@@ -1,20 +1,18 @@
 <script setup>
 import { watchEffect, ref, onMounted } from 'vue';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../config/firebase';
 import { storeGet, storeSet } from '../utils/storage';
+import { useSpotifyStore } from '../stores/spotifyStore';
 
 const props = defineProps(['isPlaying']);
+const spotifyStore = useSpotifyStore();
 const showButton = ref(false);
-const playListIds = [];
+let playListIds = [];
 const currentPlayList = ref();
 const previousIndex = ref(0);
 
 onMounted(async () => {
-  const savedPlaylists = await getDocs(collection(db, 'playlist'));
-  savedPlaylists.forEach(doc => {
-    playListIds.push(doc.data().pl);
-  });
+  const savedPlaylists = await spotifyStore.getSpotifyPlaylist();
+  playListIds = savedPlaylists.map(data => data.pl);
   currentPlayList.value = playListIds[0];
 
   setupSpotify();
@@ -26,7 +24,7 @@ function setupSpotify() {
     if (!plIndex) {
       plIndex = 0;
     }
-    
+
     previousIndex.value = plIndex;
     currentPlayList.value = playListIds[plIndex];
 

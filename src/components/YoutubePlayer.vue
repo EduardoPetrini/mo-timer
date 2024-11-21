@@ -1,21 +1,20 @@
 <script setup>
 import { watchEffect, ref, onMounted } from 'vue';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../config/firebase';
 import { storeGet, storeSet } from '../utils/storage';
+import { useYoutubeStore } from '../stores/youtubeStore';
 
 const props = defineProps(['isPlaying']);
+const youtubeStore = useYoutubeStore();
 const showButton = ref(false);
-const videosIds = [];
+let videosIds = [];
 const currentVideo = ref();
 const previousIndex = ref(0);
 
 onMounted(async () => {
   console.log('before mount - mounting script tag');
-  const savedVideos = await getDocs(collection(db, 'yt_videos'));
-  savedVideos.forEach(doc => {
-    videosIds.push(doc.data().vd);
-  });
+  const savedVideos = await youtubeStore.getYoutubePlaylist();
+  videosIds = savedVideos.map(data => data.vd);
+
   currentVideo.value = videosIds[0];
 
   if (window.YT?.Player) {
