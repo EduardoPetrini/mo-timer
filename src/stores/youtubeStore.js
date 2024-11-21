@@ -16,7 +16,6 @@ export const useYoutubeStore = defineStore('youtube', () => {
       videoIds.push({ vd: data.vd, id: doc.id });
     });
 
-    console.log('Got YT playlist', videoIds.length)
     return videoIds;
   };
 

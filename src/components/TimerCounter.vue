@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, watch, watchEffect } from 'vue';
 
-const { isRequestTogglePlayChanged } = defineProps(['isRequestTogglePlayChanged']);
+const props = defineProps(['isRequestTogglePlayChanged', 'isAsc']);
 const emit = defineEmits(['play']);
 
 const isPlaying = ref(false);
@@ -11,6 +11,11 @@ const hour = ref(1);
 let intervalId;
 
 const startResume = () => {
+  if (props.isAsc) {
+    pausePlay();
+    return;
+  }
+
   const interval = setInterval(() => {
     if (second.value === 0) {
       second.value = 59;
@@ -59,10 +64,16 @@ watchEffect(async () => {
   }
 });
 
+watch(props.isRequestTogglePlayChanged, () => {
+  togglePlay();
+});
+
 watch(
-  () => isRequestTogglePlayChanged,
-  () => {
-    togglePlay();
+  () => props.isAsc,
+  isAsc => {
+    if (isAsc) {
+      pausePlay();
+    }
   }
 );
 

@@ -1,5 +1,5 @@
 <script setup>
-import { watchEffect, ref, onMounted } from 'vue';
+import { watchEffect, ref, onMounted, watch } from 'vue';
 import { storeGet, storeSet } from '../utils/storage';
 import { useYoutubeStore } from '../stores/youtubeStore';
 
@@ -11,7 +11,6 @@ const currentVideo = ref();
 const previousIndex = ref(0);
 
 onMounted(async () => {
-  console.log('before mount - mounting script tag');
   const savedVideos = await youtubeStore.getYoutubePlaylist();
   videosIds = savedVideos.map(data => data.vd);
 
@@ -35,7 +34,6 @@ function mountYoutubeScriptTag() {
 
 let player;
 window.onYouTubeIframeAPIReady = () => {
-  console.log('Youtube ready, method called by the API');
   let ytIndex = storeGet('yt-index');
   if (!ytIndex) {
     ytIndex = 0;
@@ -43,7 +41,6 @@ window.onYouTubeIframeAPIReady = () => {
 
   previousIndex.value = ytIndex;
   currentVideo.value = videosIds[ytIndex] || 'RDjfKfPfyJRdk';
-  console.log('Starting with the video', videosIds[ytIndex]);
 
   player = new window.YT.Player('player', {
     height: '100',

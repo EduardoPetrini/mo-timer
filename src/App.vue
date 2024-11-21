@@ -53,6 +53,7 @@ onMounted(async () => {
   setStyle(0);
 
   window.addEventListener('keyup', spacePressed);
+
   const bgIndex = storeGet('bg-index');
 
   if (bgIndex) {
@@ -67,12 +68,8 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="p-2 h-screen flex justify-center items-center bg-black" :style="styleObj">
-    <div class="block">
-      <TimerTab @play="playEvent" :isRequestTogglePlayChanged="isRequestTogglePlayChanged" />
-      <PlayerSelector :isPlaying="isPlaying" />
-    </div>
+    <RouterView @play="playEvent" :isRequestTogglePlayChanged="isRequestTogglePlayChanged" :isPlaying="isPlaying" />
     <BackgroundImage @changeBackground="randomBackground" />
     <FullScreen />
   </div>
 </template>
-
