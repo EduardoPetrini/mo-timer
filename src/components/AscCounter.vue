@@ -45,7 +45,7 @@ watchEffect(async () => {
   }
 });
 
-watch(isRequestTogglePlayChanged, () => {
+watch(() => isRequestTogglePlayChanged, () => {
   togglePlay();
 });
 

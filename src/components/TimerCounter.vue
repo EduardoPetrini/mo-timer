@@ -59,9 +59,12 @@ watchEffect(async () => {
   }
 });
 
-watch(isRequestTogglePlayChanged, () => {
-  togglePlay();
-});
+watch(
+  () => isRequestTogglePlayChanged,
+  () => {
+    togglePlay();
+  }
+);
 
 function pausePlay() {
   isPlaying.value = false;
