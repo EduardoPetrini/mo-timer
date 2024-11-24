@@ -17,3 +17,7 @@
 .btn-select {
   @apply text-lightw bg-gray-600/50 rounded-lg px-2 py-2 pt-1 cursor-pointer border-white hover:border-b hover:text-amber-100 transition ease-out duration-500;
 }
+
+.btn-add {
+  @apply text-lightw bg-gray-600/50 rounded-lg px-2 py-2 pt-1 cursor-pointer border-white hover:border-b hover:text-amber-100 transition ease-out duration-75;
+}
