@@ -1,19 +1,24 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from './config/firebase';
 import BackgroundImage from './components/BackgroundImage.vue';
 import FullScreen from './components/FullScreen.vue';
 import TimerTab from './components/TimerTab.vue';
+import Header from './components/Header.vue';
 import { storeGet, storeSet } from './utils/storage';
 import PlayerSelector from './components/PlayerSelector.vue';
 
 const isPlaying = ref(false);
+const showHeader = ref(false);
 const isRequestTogglePlayChanged = ref({ active: false });
 const backgroundImageList = [];
 
 const styleObj = ref('');
 const previousIndex = ref(0);
+
+const auth = getAuth();
 
 const KEYBOARD_EVENTS = ['Space', 'MediaPlayPause'];
 
@@ -60,16 +65,29 @@ onMounted(async () => {
     previousIndex.value = Number(bgIndex);
     setStyle(previousIndex.value);
   }
+
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      return;
+    }
+
+    console.log('User is logged');
+    showHeader.value = true;
+  });
 });
+
 onBeforeUnmount(() => {
   window.removeEventListener('keyup', spacePressed);
 });
 </script>
 
 <template>
-  <div class="p-2 h-screen flex justify-center items-center bg-black" :style="styleObj">
-    <RouterView @play="playEvent" :isRequestTogglePlayChanged="isRequestTogglePlayChanged" :isPlaying="isPlaying" />
-    <BackgroundImage @changeBackground="randomBackground" />
-    <FullScreen />
+  <div class="h-screen overflow-hidden" :style="styleObj">
+    <Header v-if="showHeader" />
+    <div class="flex h-full justify-center items-center">
+      <RouterView @play="playEvent" :isRequestTogglePlayChanged="isRequestTogglePlayChanged" :isPlaying="isPlaying" />
+      <BackgroundImage @changeBackground="randomBackground" />
+      <FullScreen />
+    </div>
   </div>
 </template>
