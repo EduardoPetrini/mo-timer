@@ -30,7 +30,6 @@ const fieldName = ref(plMap[currentPlayer.value ?? 'spotify'].field);
 const currentList = ref([]);
 
 async function deletePl(playlist) {
-  console.log(playlist);
   switch (currentPlayer.value) {
     case 'youtube': {
       await youtubeStore.deleteYoutubePlaylist(playlist);
@@ -73,7 +72,6 @@ async function savePlaylist() {
     return;
   }
 
-  console.log(newPlaylist.value);
   switch (currentPlayer.value) {
     case 'youtube': {
       await youtubeStore.addYoutubePlaylist(newPlaylist.value);
@@ -139,7 +137,9 @@ onMounted(async () => {
         <tbody class="">
           <tr v-for="playlist in currentList" :key="playlist.id" class="border-b hover:bg-gray-50">
             <td class="px-6 py-4 text-sm text-gray-900">{{ playlist[fieldName] }}</td>
-            <td class="px-6 py-4 text-sm text-gray-500"><a :href="plMap[currentPlayer].url + playlist[fieldName]" target="_blank" class="flex gap-2">Link <Link /></a></td>
+            <td class="px-6 py-4 text-sm text-gray-500">
+              <a :href="plMap[currentPlayer].url + playlist[fieldName]" target="_blank" class="flex gap-2">Link <Link /></a>
+            </td>
             <td class="px-6 py-4 text-sm text-gray-500 flex gap-2">
               <Delete class="cursor-pointer" title="Delete post" @click="deletePl(playlist)" />
             </td>
@@ -152,7 +152,7 @@ onMounted(async () => {
     </div>
     <div v-show="isToAdd">
       <div class="flex flex-col bg-gray-100 rounded-md">
-        <input class="p-2 rounded-md" placeholder="Playlist id" v-model="newPlaylist" />
+        <input class="p-2 rounded-md" :placeholder="currentPlayer + ' playlist id: '+plMap[currentPlayer].url+'<id>'" v-model="newPlaylist" />
       </div>
       <div class="flex justify-between">
         <button class="btn-add mt-2 text-red-400" @click="cancelSave">Cancel</button>
