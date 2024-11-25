@@ -1,5 +1,6 @@
 <script setup>
 import Delete from '../icons/Delete.vue';
+import Link from '../icons/Link.vue';
 import { onMounted, ref } from 'vue';
 import { useSpotifyStore } from '../../stores/spotifyStore';
 import { useYoutubeStore } from '../../stores/youtubeStore';
@@ -14,6 +15,7 @@ const youtubePlaylists = ref([]);
 const isToAdd = ref(false);
 const newPlaylist = ref('');
 const errorMessage = ref('');
+const plMap = { youtube: { field: 'vd', url: 'https://www.youtube.com/watch?v=' }, spotify: { field: 'pl', url: 'https://open.spotify.com/playlist/' } };
 
 const currentPlayer = ref('spotify');
 
@@ -23,8 +25,7 @@ if (savedPlayer) {
 }
 
 const options = ref(['youtube', 'spotify']);
-const fieldNameMap = ref({ youtube: 'vd', spotify: 'pl' });
-const fieldName = ref(fieldNameMap[currentPlayer.value ?? 'spotify']);
+const fieldName = ref(plMap[currentPlayer.value ?? 'spotify'].field);
 
 const currentList = ref([]);
 
@@ -50,12 +51,12 @@ function playerChanged() {
   switch (currentPlayer.value) {
     case 'youtube': {
       currentList.value = youtubePlaylists.value;
-      fieldName.value = fieldNameMap.value.youtube;
+      fieldName.value = plMap.youtube.field;
       break;
     }
     case 'spotify': {
       currentList.value = spotifyPlaylists.value;
-      fieldName.value = fieldNameMap.value.spotify;
+      fieldName.value = plMap.spotify.field;
       break;
     }
   }
@@ -104,12 +105,12 @@ onMounted(async () => {
   switch (currentPlayer.value) {
     case 'youtube': {
       currentList.value = youtubePlaylists.value;
-      fieldName.value = fieldNameMap.value.youtube;
+      fieldName.value = plMap.youtube.field;
       break;
     }
     case 'spotify': {
       currentList.value = spotifyPlaylists.value;
-      fieldName.value = fieldNameMap.value.spotify;
+      fieldName.value = plMap.spotify.field;
       break;
     }
   }
@@ -138,7 +139,7 @@ onMounted(async () => {
         <tbody class="">
           <tr v-for="playlist in currentList" :key="playlist.id" class="border-b hover:bg-gray-50">
             <td class="px-6 py-4 text-sm text-gray-900">{{ playlist[fieldName] }}</td>
-            <td class="px-6 py-4 text-sm text-gray-500">hm</td>
+            <td class="px-6 py-4 text-sm text-gray-500"><a :href="plMap[currentPlayer].url + playlist[fieldName]" target="_blank" class="flex gap-2">Link <Link /></a></td>
             <td class="px-6 py-4 text-sm text-gray-500 flex gap-2">
               <Delete class="cursor-pointer" title="Delete post" @click="deletePl(playlist)" />
             </td>
