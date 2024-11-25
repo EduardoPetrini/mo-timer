@@ -72,6 +72,8 @@ async function savePlaylist() {
     return;
   }
 
+  newPlaylist.value = newPlaylist.value.replace(plMap[currentPlayer.value].url, '').split(/\?|&/)[0];
+
   switch (currentPlayer.value) {
     case 'youtube': {
       await youtubeStore.addYoutubePlaylist(newPlaylist.value);
@@ -152,7 +154,7 @@ onMounted(async () => {
     </div>
     <div v-show="isToAdd">
       <div class="flex flex-col bg-gray-100 rounded-md">
-        <input class="p-2 rounded-md" :placeholder="currentPlayer + ' playlist id: '+plMap[currentPlayer].url+'<id>'" v-model="newPlaylist" />
+        <input class="p-2 rounded-md" :placeholder="currentPlayer + ' playlist id: ' + plMap[currentPlayer].url + '<id>'" v-model="newPlaylist" />
       </div>
       <div class="flex justify-between">
         <button class="btn-add mt-2 text-red-400" @click="cancelSave">Cancel</button>
