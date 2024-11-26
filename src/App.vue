@@ -1,14 +1,11 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from './config/firebase';
 import BackgroundImage from './components/BackgroundImage.vue';
 import FullScreen from './components/FullScreen.vue';
-import TimerTab from './components/TimerTab.vue';
 import Header from './components/Header.vue';
 import { storeGet, storeSet } from './utils/storage';
-import PlayerSelector from './components/PlayerSelector.vue';
+import { useBackgroundStore } from './stores/backgroundStore';
 
 const isPlaying = ref(false);
 const showHeader = ref(false);
@@ -17,6 +14,8 @@ const backgroundImageList = [];
 
 const styleObj = ref('');
 const previousIndex = ref(0);
+
+const backgroundStore = useBackgroundStore();
 
 const auth = getAuth();
 
@@ -51,9 +50,9 @@ function spacePressed(event) {
 }
 
 onMounted(async () => {
-  const savedBackground = await getDocs(collection(db, 'background'));
+  const savedBackground = await backgroundStore.getWallpapers();
   savedBackground.forEach(doc => {
-    backgroundImageList.push(doc.data().bg);
+    backgroundImageList.push(doc.bg);
   });
   setStyle(0);
 
