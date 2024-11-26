@@ -142,7 +142,7 @@ onMounted(async () => {
             <td class="px-6 py-4 text-sm text-gray-500">
               <a :href="plMap[currentPlayer].url + playlist[fieldName]" target="_blank" class="flex gap-2">Link <Link /></a>
             </td>
-            <td class="px-6 py-4 text-sm text-gray-500 flex gap-2">
+            <td class="px-6 py-4 text-sm text-gray-500">
               <Delete class="cursor-pointer" title="Delete post" @click="deletePl(playlist)" />
             </td>
           </tr>
