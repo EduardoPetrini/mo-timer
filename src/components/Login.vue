@@ -24,6 +24,10 @@ async function handleLogin() {
   }
 }
 
+function goHome() {
+  router.push('/');
+}
+
 onMounted(() => {
   onAuthStateChanged(auth, user => {
     if (!user) {
@@ -48,6 +52,7 @@ onMounted(() => {
       </div>
 
       <button type="submit" class="w-full p-3 text-white rounded border-b-2 btn">Log In</button>
+      <button type="button" class="w-full p-3 text-white rounded border-b-2 btn mt-2" @click.prevent="goHome">Home</button>
 
       <p v-if="errorMessage" class="mt-4 text-sm text-center text-red-500 bg-white px-2 rounded-md">{{ errorMessage }}</p>
     </form>

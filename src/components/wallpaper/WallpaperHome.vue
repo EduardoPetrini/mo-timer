@@ -2,6 +2,12 @@
 import { onMounted, ref } from 'vue';
 import Delete from '../icons/Delete.vue';
 import { useBackgroundStore } from '../../stores/backgroundStore';
+import { getAuth, signOut } from 'firebase/auth';
+import { useRouter } from 'vue-router';
+
+const auth = getAuth();
+const router = useRouter();
+
 
 const wallpaperList = ref([]);
 const isToAdd = ref(false);
@@ -39,6 +45,13 @@ async function saveWallpaper() {
 }
 
 onMounted(async () => {
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      return;
+    }
+    router.push('/');
+  });
+
   wallpaperList.value = await backgroundStore.getWallpapers();
 });
 </script>

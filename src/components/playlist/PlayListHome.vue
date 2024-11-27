@@ -5,9 +5,14 @@ import { onMounted, ref } from 'vue';
 import { useSpotifyStore } from '../../stores/spotifyStore';
 import { useYoutubeStore } from '../../stores/youtubeStore';
 import { storeGet } from '../../utils/storage';
+import { useRouter } from 'vue-router';
+import { getAuth } from 'firebase/auth';
 
 const spotifyStore = useSpotifyStore();
 const youtubeStore = useYoutubeStore();
+
+const auth = getAuth();
+const router = useRouter();
 
 const spotifyPlaylists = ref([]);
 const youtubePlaylists = ref([]);
@@ -98,6 +103,13 @@ function cancelSave() {
 }
 
 onMounted(async () => {
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      return;
+    }
+    router.push('/');
+  });
+
   const [spotifyResolved, youtubeResolved] = await Promise.all([spotifyStore.getSpotifyPlaylist(), youtubeStore.getYoutubePlaylist()]);
   spotifyPlaylists.value = spotifyResolved;
   youtubePlaylists.value = youtubeResolved;

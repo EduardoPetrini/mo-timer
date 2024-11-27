@@ -1,10 +1,12 @@
 <script setup>
+import { getAuth, signOut } from 'firebase/auth';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const auth = getAuth();
 
 function goPlaylist() {
-router.push('/admin/playlist');
+  router.push('/admin/playlist');
 }
 
 function goWallpapers() {
@@ -12,7 +14,13 @@ function goWallpapers() {
 }
 
 function goHome() {
-  router.push('/')
+  router.push('/');
+}
+
+function signOutUser() {
+  signOut(auth);
+  goHome();
+  window.location.reload();
 }
 </script>
 
@@ -24,6 +32,7 @@ function goHome() {
     <div class="flex gap-4">
       <button class="border-2 border-gray-400 rounded-md px-2 hover:border-gray-200 hover:scale-105 transition ease-out duration-75" @click="goPlaylist">Playlists</button>
       <button class="border-2 border-gray-400 rounded-md px-2 hover:border-gray-200 hover:scale-105 transition ease-out duration-75" @click="goWallpapers">Wallpapers</button>
+      <button class="border-2 border-gray-400 rounded-md px-2 hover:border-gray-200 hover:scale-105 transition ease-out duration-75" @click="signOutUser">Sign out</button>
     </div>
   </div>
 </template>
