@@ -60,7 +60,7 @@ onMounted(async () => {
         <tbody class="">
           <tr v-for="wp in wallpaperList" :key="wp.id" class="border-b hover:bg-gray-50">
             <td class="px-6 py-4 text-sm text-gray-900">
-              <a :href="wp.bg" target="_blank"> {{ wp.bg }}</a>
+              <a :href="wp.bg" target="_blank"> {{ wp.bg.length > 65 ? wp.bg.slice(0, 65) + '...' : wp.bg }}</a>
             </td>
             <td class="px-6 py-4 text-sm text-gray-500">
               <img :src="wp.bg" alt="" height="100" width="100" />
