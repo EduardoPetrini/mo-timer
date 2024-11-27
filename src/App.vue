@@ -6,6 +6,7 @@ import FullScreen from './components/FullScreen.vue';
 import Header from './components/Header.vue';
 import { storeGet, storeSet } from './utils/storage';
 import { useBackgroundStore } from './stores/backgroundStore';
+import { useRouter } from 'vue-router';
 
 const isPlaying = ref(false);
 const showHeader = ref(false);
@@ -16,10 +17,13 @@ const styleObj = ref('');
 const previousIndex = ref(0);
 
 const backgroundStore = useBackgroundStore();
+const router = useRouter();
 
 const auth = getAuth();
 
 const KEYBOARD_EVENTS = ['Space', 'MediaPlayPause'];
+const LOGIN_SEQUENCE = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyA', 'KeyB'];
+const userLoginSequence = ref([]);
 
 function randomBackground() {
   previousIndex.value++;
@@ -49,6 +53,23 @@ function spacePressed(event) {
   isRequestTogglePlayChanged.value.active = !isRequestTogglePlayChanged.value.active;
 }
 
+function sequencesForLogin(event) {
+  userLoginSequence.value.push(event.code);
+
+  if (userLoginSequence.value.length > LOGIN_SEQUENCE.length) {
+    userLoginSequence.value = userLoginSequence.value.slice(userLoginSequence.value.length - LOGIN_SEQUENCE.length);
+  }
+
+  if (userLoginSequence.value.length !== LOGIN_SEQUENCE.length) {
+    return;
+  }
+
+  if (userLoginSequence.value.join(' ') === LOGIN_SEQUENCE.join(' ')) {
+    router.push('/admin/login');
+    userLoginSequence.value = [];
+  }
+}
+
 onMounted(async () => {
   const savedBackground = await backgroundStore.getWallpapers();
   savedBackground.forEach(doc => {
@@ -57,6 +78,7 @@ onMounted(async () => {
   setStyle(0);
 
   window.addEventListener('keyup', spacePressed);
+  window.addEventListener('keyup', sequencesForLogin);
 
   const bgIndex = storeGet('bg-index');
 
@@ -70,13 +92,13 @@ onMounted(async () => {
       return;
     }
 
-    console.log('User is logged');
     showHeader.value = true;
   });
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener('keyup', spacePressed);
+  window.removeEventListener('keyup', sequencesForLogin);
 });
 </script>
 
