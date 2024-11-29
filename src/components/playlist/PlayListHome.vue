@@ -6,7 +6,7 @@ import { useSpotifyStore } from '../../stores/spotifyStore';
 import { useYoutubeStore } from '../../stores/youtubeStore';
 import { storeGet } from '../../utils/storage';
 import { useRouter } from 'vue-router';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const spotifyStore = useSpotifyStore();
 const youtubeStore = useYoutubeStore();
