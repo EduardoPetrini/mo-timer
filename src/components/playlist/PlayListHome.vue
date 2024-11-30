@@ -120,9 +120,11 @@ onMounted(async () => {
             </td>
             <td class="px-6 py-4 text-sm text-gray-500">
               <div v-if="currentPlayer === 'youtube'">
-                <iframe width="100%" height="80" :src="'https://www.youtube.com/embed/'+playlist[fieldName]" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe style="border-radius: 12px" width="100%" height="80" :src="'https://www.youtube.com/embed/' + playlist[fieldName]"  frameborder="0"></iframe>
               </div>
-              <div v-else><iframe style="border-radius: 12px" :src="'https://open.spotify.com/embed/playlist/' + playlist[fieldName]" width="100%" height="80" frameBorder="0" loading="eager"></iframe></div>
+              <div v-else>
+                <iframe style="border-radius: 12px" width="100%" height="80" :src="'https://open.spotify.com/embed/playlist/' + playlist[fieldName]" frameBorder="0"></iframe>
+              </div>
             </td>
             <td class="px-6 py-4 text-sm text-gray-500">
               <Delete class="cursor-pointer" title="Delete post" @click="deletePl(playlist)" />
