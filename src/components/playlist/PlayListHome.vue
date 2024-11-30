@@ -35,9 +35,9 @@ async function deletePl(playlist) {
 }
 
 async function playerChanged() {
-  newPlaylist.value = ''
+  newPlaylist.value = '';
   errorMessage.value = '';
-  
+
   playerStore = storeMap[currentPlayer.value]();
   currentList.value = await playerStore.getPlaylist();
 
@@ -108,19 +108,21 @@ onMounted(async () => {
       <table class="min-w-full h-full bg-white border border-gray-200 rounded-lg shadow-md">
         <thead>
           <tr class="bg-gray-100 border-b">
-            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 min-w-96">ID</th>
+            <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">ID</th>
             <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Playlist</th>
             <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
           </tr>
         </thead>
         <tbody class="">
           <tr v-for="playlist in currentList" :key="playlist.id" class="border-b hover:bg-gray-50">
-            <td class="px-6 py-4 text-sm text-gray-900">{{ playlist[fieldName] }}</td>
+            <td class="px-6 py-4 text-sm text-gray-900">
+              <a :href="plMap[currentPlayer].url + playlist[fieldName]" target="_blank" class="flex gap-2">{{ playlist[fieldName] }} </a>
+            </td>
             <td class="px-6 py-4 text-sm text-gray-500">
-              <a :href="plMap[currentPlayer].url + playlist[fieldName]" target="_blank" class="flex gap-2"
-                >Link
-                <Link />
-              </a>
+              <div v-if="currentPlayer === 'youtube'">
+                <iframe width="100%" height="80" :src="'https://www.youtube.com/embed/'+playlist[fieldName]" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+              </div>
+              <div v-else><iframe style="border-radius: 12px" :src="'https://open.spotify.com/embed/playlist/' + playlist[fieldName]" width="100%" height="80" frameBorder="0" loading="eager"></iframe></div>
             </td>
             <td class="px-6 py-4 text-sm text-gray-500">
               <Delete class="cursor-pointer" title="Delete post" @click="deletePl(playlist)" />
