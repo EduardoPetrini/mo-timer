@@ -4,7 +4,7 @@ import { db } from '../config/firebase';
 
 const TABLE_NAME = 'playlist';
 export const useSpotifyStore = defineStore('spotify', () => {
-  const getSpotifyPlaylist = async () => {
+  const getPlaylist = async () => {
     const colRef = collection(db, TABLE_NAME);
     const savedPlaylists = await getDocs(colRef);
 
@@ -21,7 +21,7 @@ export const useSpotifyStore = defineStore('spotify', () => {
     return playListIds;
   };
 
-  const addSpotifyPlaylist = async playListId => {
+  const addPlaylist = async playListId => {
     const colRef = collection(db, TABLE_NAME);
     const playList = { pl: playListId };
 
@@ -29,7 +29,7 @@ export const useSpotifyStore = defineStore('spotify', () => {
     return result;
   };
 
-  const deleteSpotifyPlaylist = async playList => {
+  const deletePlaylist = async playList => {
     const colRef = collection(db, TABLE_NAME);
     const { id, ...data } = playList;
     const docRef = doc(colRef, id);
@@ -39,5 +39,5 @@ export const useSpotifyStore = defineStore('spotify', () => {
     return result;
   };
 
-  return { getSpotifyPlaylist, addSpotifyPlaylist, deleteSpotifyPlaylist };
+  return { getPlaylist, addPlaylist, deletePlaylist };
 });

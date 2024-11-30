@@ -11,7 +11,7 @@ const currentVideo = ref();
 const previousIndex = ref(0);
 
 onMounted(async () => {
-  const savedVideos = await youtubeStore.getYoutubePlaylist();
+  const savedVideos = await youtubeStore.getPlaylist();
   videosIds = savedVideos.map(data => data.vd);
 
   currentVideo.value = videosIds[0];

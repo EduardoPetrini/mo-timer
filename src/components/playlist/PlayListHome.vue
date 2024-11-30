@@ -2,25 +2,18 @@
 import Delete from '../icons/Delete.vue';
 import Link from '../icons/Link.vue';
 import { onMounted, ref } from 'vue';
-import { useSpotifyStore } from '../../stores/spotifyStore';
-import { useYoutubeStore } from '../../stores/youtubeStore';
 import { storeGet } from '../../utils/storage';
 import { useRouter } from 'vue-router';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-
-const spotifyStore = useSpotifyStore();
-const youtubeStore = useYoutubeStore();
+import { storeMap } from '../../stores/playerStoresMap';
+import { plMap } from '../../utils/playListMap';
 
 const auth = getAuth();
 const router = useRouter();
 
-const spotifyPlaylists = ref([]);
-const youtubePlaylists = ref([]);
-
 const isToAdd = ref(false);
 const newPlaylist = ref('');
 const errorMessage = ref('');
-const plMap = { youtube: { field: 'vd', url: 'https://www.youtube.com/watch?v=' }, spotify: { field: 'pl', url: 'https://open.spotify.com/playlist/' } };
 
 const currentPlayer = ref('spotify');
 
@@ -29,37 +22,31 @@ if (savedPlayer) {
   currentPlayer.value = savedPlayer;
 }
 
+let playerStore = storeMap[currentPlayer.value]();
+
 const options = ref(['youtube', 'spotify']);
 const fieldName = ref(plMap[currentPlayer.value ?? 'spotify'].field);
 
 const currentList = ref([]);
 
 async function deletePl(playlist) {
-  switch (currentPlayer.value) {
-    case 'youtube': {
-      await youtubeStore.deleteYoutubePlaylist(playlist);
-      youtubePlaylists.value = await youtubeStore.getYoutubePlaylist();
-      currentList.value = youtubePlaylists.value;
-      break;
-    }
-    case 'spotify': {
-      await spotifyStore.deleteSpotifyPlaylist(playlist);
-      spotifyPlaylists.value = await spotifyStore.getSpotifyPlaylist();
-      currentList.value = spotifyPlaylists.value;
-      break;
-    }
-  }
+  await playerStore.deletePlaylist(playlist);
+  currentList.value = await playerStore.getPlaylist();
 }
 
-function playerChanged() {
+async function playerChanged() {
+  newPlaylist.value = ''
+  errorMessage.value = '';
+  
+  playerStore = storeMap[currentPlayer.value]();
+  currentList.value = await playerStore.getPlaylist();
+
   switch (currentPlayer.value) {
     case 'youtube': {
-      currentList.value = youtubePlaylists.value;
       fieldName.value = plMap.youtube.field;
       break;
     }
     case 'spotify': {
-      currentList.value = spotifyPlaylists.value;
       fieldName.value = plMap.spotify.field;
       break;
     }
@@ -79,22 +66,15 @@ async function savePlaylist() {
 
   newPlaylist.value = newPlaylist.value.replace(plMap[currentPlayer.value].url, '').split(/\?|&/)[0];
 
-  switch (currentPlayer.value) {
-    case 'youtube': {
-      await youtubeStore.addYoutubePlaylist(newPlaylist.value);
-      youtubePlaylists.value = await youtubeStore.getYoutubePlaylist();
-      currentList.value = youtubePlaylists.value;
-      break;
-    }
-    case 'spotify': {
-      await spotifyStore.addSpotifyPlaylist(newPlaylist.value);
-      spotifyPlaylists.value = await spotifyStore.getSpotifyPlaylist();
-      currentList.value = spotifyPlaylists.value;
-      break;
-    }
-  }
+  try {
+    await playerStore.addPlaylist(newPlaylist.value);
+    currentList.value = await playerStore.getPlaylist();
 
-  isToAdd.value = false;
+    isToAdd.value = false;
+  } catch (error) {
+    console.error(error);
+    errorMessage.value = error.message;
+  }
 }
 
 function cancelSave() {
@@ -110,22 +90,7 @@ onMounted(async () => {
     router.push('/');
   });
 
-  const [spotifyResolved, youtubeResolved] = await Promise.all([spotifyStore.getSpotifyPlaylist(), youtubeStore.getYoutubePlaylist()]);
-  spotifyPlaylists.value = spotifyResolved;
-  youtubePlaylists.value = youtubeResolved;
-
-  switch (currentPlayer.value) {
-    case 'youtube': {
-      currentList.value = youtubePlaylists.value;
-      fieldName.value = plMap.youtube.field;
-      break;
-    }
-    case 'spotify': {
-      currentList.value = spotifyPlaylists.value;
-      fieldName.value = plMap.spotify.field;
-      break;
-    }
-  }
+  await playerChanged();
 });
 </script>
 
@@ -152,7 +117,10 @@ onMounted(async () => {
           <tr v-for="playlist in currentList" :key="playlist.id" class="border-b hover:bg-gray-50">
             <td class="px-6 py-4 text-sm text-gray-900">{{ playlist[fieldName] }}</td>
             <td class="px-6 py-4 text-sm text-gray-500">
-              <a :href="plMap[currentPlayer].url + playlist[fieldName]" target="_blank" class="flex gap-2">Link <Link /></a>
+              <a :href="plMap[currentPlayer].url + playlist[fieldName]" target="_blank" class="flex gap-2"
+                >Link
+                <Link />
+              </a>
             </td>
             <td class="px-6 py-4 text-sm text-gray-500">
               <Delete class="cursor-pointer" title="Delete post" @click="deletePl(playlist)" />

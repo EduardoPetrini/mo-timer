@@ -11,7 +11,7 @@ const currentPlayList = ref();
 const previousIndex = ref(0);
 
 onMounted(async () => {
-  const savedPlaylists = await spotifyStore.getSpotifyPlaylist();
+  const savedPlaylists = await spotifyStore.getPlaylist();
   playListIds = savedPlaylists.map(data => data.pl);
   currentPlayList.value = playListIds[0];
 

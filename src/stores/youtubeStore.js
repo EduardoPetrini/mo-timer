@@ -4,7 +4,7 @@ import { db } from '../config/firebase';
 
 const TABLE_NAME = 'yt_videos';
 export const useYoutubeStore = defineStore('youtube', () => {
-  const getYoutubePlaylist = async () => {
+  const getPlaylist = async () => {
     const colRef = collection(db, TABLE_NAME);
     const savedPlaylists = await getDocs(colRef);
     const videoIds = [];
@@ -19,7 +19,7 @@ export const useYoutubeStore = defineStore('youtube', () => {
     return videoIds;
   };
 
-  const addYoutubePlaylist = async videoId => {
+  const addPlaylist = async videoId => {
     const colRef = collection(db, TABLE_NAME);
     const video = { vd: videoId };
 
@@ -27,7 +27,7 @@ export const useYoutubeStore = defineStore('youtube', () => {
     return result;
   };
 
-  const deleteYoutubePlaylist = async video => {
+  const deletePlaylist = async video => {
     const colRef = collection(db, TABLE_NAME);
     const { id, ...data } = video;
     const docRef = doc(colRef, id);
@@ -37,5 +37,5 @@ export const useYoutubeStore = defineStore('youtube', () => {
     return result;
   };
 
-  return { getYoutubePlaylist, addYoutubePlaylist, deleteYoutubePlaylist };
+  return { getPlaylist, addPlaylist, deletePlaylist };
 });
