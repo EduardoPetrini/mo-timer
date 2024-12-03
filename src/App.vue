@@ -3,6 +3,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import BackgroundImage from './components/BackgroundImage.vue';
 import FullScreen from './components/FullScreen.vue';
+import Footer from './components/Footer.vue';
 import Header from './components/Header.vue';
 import { storeGet, storeSet } from './utils/storage';
 import { useBackgroundStore } from './stores/backgroundStore';
@@ -103,12 +104,11 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="h-screen overflow-hidden" :style="styleObj">
+  <div class="h-screen flex flex-col" :style="styleObj">
     <Header v-if="showHeader" />
-    <div class="flex h-full justify-center items-center">
+    <div class="flex-grow flex justify-center items-center">
       <RouterView @play="playEvent" :isRequestTogglePlayChanged="isRequestTogglePlayChanged" :isPlaying="isPlaying" />
-      <BackgroundImage @changeBackground="randomBackground" />
-      <FullScreen />
     </div>
+    <Footer @changeBackground="randomBackground"/>
   </div>
 </template>
