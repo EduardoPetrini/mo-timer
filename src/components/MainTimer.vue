@@ -4,11 +4,15 @@ import PlayerSelector from './PlayerSelector.vue';
 
 const props = defineProps(['isRequestTogglePlayChanged', 'isPlaying']);
 const emit = defineEmits(['play']);
+
+function emitPlay(...args) {
+  emit('play', ...args);
+}
 </script>
 
 <template>
   <div class="block">
-    <TimerTab @play="(...args) => emit('play', ...args)" :isRequestTogglePlayChanged="props.isRequestTogglePlayChanged" />
+    <TimerTab @play="emitPlay" :isRequestTogglePlayChanged="props.isRequestTogglePlayChanged" />
     <PlayerSelector :isPlaying="props.isPlaying" />
   </div>
 </template>

@@ -10,6 +10,10 @@ const minute = ref(0);
 const hour = ref(1);
 let intervalId;
 
+function emitPlay(...args) {
+  emit('play', ...args);
+}
+
 const startResume = () => {
   if (props.isAsc) {
     pausePlay();
@@ -80,7 +84,7 @@ watch(
 function pausePlay() {
   isPlaying.value = false;
 
-  emit('play', false);
+  emitPlay(false);
   if (intervalId) {
     return clearInterval(intervalId);
   }
@@ -91,12 +95,12 @@ function togglePlay() {
   isPlaying.value = !isPlaying.value;
 
   if (isTimeRunning) {
-    emit('play', false);
+    emitPlay(false);
     return clearInterval(intervalId);
   }
 
   if (!checkIsFinished()) {
-    emit('play', true);
+    emitPlay(true);
   }
   intervalId = startResume();
 }
@@ -109,7 +113,7 @@ function reset() {
   minute.value = 0;
   hour.value = 1;
 
-  emit('play', false);
+  emitPlay(false);
 }
 
 function clicked(event) {
