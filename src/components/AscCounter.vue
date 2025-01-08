@@ -102,7 +102,6 @@ function clicked(event) {
 }
 
 function focusOut() {
-  togglePlay();
 }
 
 function onEnter(event) {
