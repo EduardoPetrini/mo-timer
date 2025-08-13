@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch, watchEffect } from 'vue';
+import { computed, ref, watch, watchEffect, onBeforeUnmount } from 'vue';
 
 const props = defineProps(['isRequestTogglePlayChanged', 'isAsc']);
 const emit = defineEmits(['play']);
@@ -132,6 +132,13 @@ function onEnter(event) {
 const displayHour = computed(() => (hour.value.toString().length > 1 ? hour.value.toString().slice(-2) : hour.value.toString().padStart(2, '0')));
 const displayMinute = computed(() => (minute.value.toString().length > 1 ? minute.value.toString().slice(-2) : minute.value.toString().padStart(2, '0')));
 const displaySecond = computed(() => (second.value.toString().length > 1 ? second.value.toString().slice(-2) : second.value.toString().padStart(2, '0')));
+
+// Add cleanup
+onBeforeUnmount(() => {
+  if (intervalId) {
+    clearInterval(intervalId);
+  }
+});
 </script>
 
 <template>
